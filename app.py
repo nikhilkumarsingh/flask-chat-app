@@ -1,8 +1,9 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_login import current_user, login_user, login_required, logout_user, LoginManager
 from flask_socketio import SocketIO, join_room, leave_room
+from pymongo.errors import DuplicateKeyError
 
-from db import get_user
+from db import get_user, save_user
 
 app = Flask(__name__)
 app.secret_key = "sfdjkafnk"
@@ -34,6 +35,24 @@ def login():
         else:
             message = 'Failed to login!'
     return render_template('login.html', message=message)
+
+
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+
+    message = ''
+    if request.method == 'POST':
+        username = request.form.get('username')
+        email = request.form.get('email')
+        password = request.form.get('password')
+        try:
+            save_user(username, email, password)
+            return redirect(url_for('login'))
+        except DuplicateKeyError:
+            message = "User already exists!"
+    return render_template('signup.html', message=message)
 
 
 @app.route("/logout/")
