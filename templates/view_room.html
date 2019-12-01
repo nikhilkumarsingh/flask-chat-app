@@ -5,7 +5,7 @@
     <title>My Chat App</title>
 </head>
 <body>
-<h1>Welcome to chat room {{ room }}</h1>
+<h1>Welcome to chat room: {{ room.name }}</h1>
 
 <div id="messages"></div>
 
@@ -13,6 +13,14 @@
     <input type="text" id="message_input" placeholder="Enter your message here">
     <button type="submit">Send</button>
 </form>
+
+<h3>Members</h3>
+<ul>
+    {% for member in room_members %}
+        <li>{{ member._id.username }}</li>
+    {% endfor %}
+</ul>
+
 </body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
 <script>
@@ -21,7 +29,7 @@
     socket.on('connect', function () {
         socket.emit('join_room', {
             username: "{{ username }}",
-            room: "{{ room }}"
+            room: "{{ room._id }}"
         });
 
         let message_input = document.getElementById('message_input');
@@ -32,7 +40,7 @@
             if (message.length) {
                 socket.emit('send_message', {
                     username: "{{ username }}",
-                    room: "{{ room }}",
+                    room: "{{ room._id }}",
                     message: message
                 })
             }
@@ -44,7 +52,7 @@
     window.onbeforeunload = function () {
         socket.emit('leave_room', {
             username: "{{ username }}",
-            room: "{{ room }}"
+            room: "{{ room._id }}"
         })
     };
 
