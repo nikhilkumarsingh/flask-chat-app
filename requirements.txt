@@ -1,3 +1,5 @@
+werkzeug
 flask
 flask-socketio
 eventlet
+pymongo
