@@ -7,7 +7,13 @@
 <body>
 <h1>Welcome to chat room: {{ room.name }}</h1>
 
-<div id="messages"></div>
+
+<button type="button" id="load_older_messages_btn">Load Older Messages</button>
+<div id="messages">
+    {% for message in messages %}
+        <div><b>{{ message.sender }}&nbsp;[{{ message.created_at }}]:&nbsp;</b> {{ message.text }}</div>
+    {% endfor %}
+</div>
 
 <form id="message_input_form">
     <input type="text" id="message_input" placeholder="Enter your message here">
@@ -20,6 +26,7 @@
         <li>{{ member._id.username }}</li>
     {% endfor %}
 </ul>
+
 
 </body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
@@ -49,6 +56,29 @@
         }
     });
 
+    let page = 0;
+
+    document.getElementById("load_older_messages_btn").onclick = (e) => {
+        page += 1;
+        fetch("/rooms/{{ room._id }}/messages?page=" + page, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(response => {
+            response.json().then(messages => {
+                messages.reverse().forEach(message => prepend_message(message.text, message.sender, message.created_at));
+            })
+        })
+    };
+
+    function prepend_message(message, username, created_at) {
+        const newNode = document.createElement('div');
+        newNode.innerHTML = `<b>${username}&nbsp;[${created_at}]:&nbsp;</b> ${message}`;
+        const messages_div = document.getElementById('messages');
+        messages_div.insertBefore(newNode, messages_div.firstChild);
+    }
+
     window.onbeforeunload = function () {
         socket.emit('leave_room', {
             username: "{{ username }}",
@@ -59,7 +89,7 @@
     socket.on('receive_message', function (data) {
         console.log(data);
         const newNode = document.createElement('div');
-        newNode.innerHTML = `<b>${data.username}:&nbsp;</b> ${data.message}`;
+        newNode.innerHTML = `<b>${data.username}&nbsp;[${data.created_at}]:&nbsp;</b> ${data.message}`;
         document.getElementById('messages').appendChild(newNode);
     });
 
