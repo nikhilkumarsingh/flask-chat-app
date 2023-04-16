@@ -1,13 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <title>My Chat App</title>
+    <title>KeepItPrivate</title>
 </head>
 
 <body>
-    <h1>Welcome to chat room: {{ room.name }}</h1>
+    <h1>Welcome to chat with <strong>{{ friend_username }}</strong></h1>
 
 
     <button type="button" id="load_older_messages_btn">Load Older Messages</button>
@@ -21,13 +19,14 @@
         <input type="text" id="message_input" placeholder="Enter your message here">
         <button type="submit">Send</button>
     </form>
-
+<!--
     <h3>Members</h3>
     <ul>
         {% for member in room_members %}
         <li>{{ member._id.username }}</li>
         {% endfor %}
     </ul>
+-->
 
 
 </body>

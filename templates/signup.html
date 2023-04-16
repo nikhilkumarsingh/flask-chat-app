@@ -1,23 +1,66 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
-    <meta charset="UTF-8">
-    <title>My Chat App</title>
+    <title>Sign up</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/header.css') }}">
+    <style>
+        .signup-box {
+            margin: 0;
+            position: absolute;
+            top: 30%;
+            left: 50%;
+            -ms-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+        }
+    </style>
 </head>
+
 <body>
-<h1>Sign Up</h1>
-<h3>{{ message }}</h3>
-<form method="post" action="/signup">
-    <label>Username:</label>
-    <input type="text" name="username">
-    <br>
-    <label>Email:</label>
-    <input type="email" name="email">
-    <br>
-    <label>Password:</label>
-    <input type="password" name="password">
-    <br>
-    <button type="submit">Submit</button>
-</form>
+    <header>
+        <div class="container">
+            <nav>
+                <ul>
+                    {% if current_user.is_authenticated %}
+                    <li><a href="{{ url_for('chats') }}">My chats</a></li>
+                    {% endif %}
+                    <li><a href="{{ url_for('home') }}">Home</a></li>
+                    <li><a href="{{ url_for('signup') }}">Sign up</a></li>
+                    {% if current_user.is_authenticated %}
+                    <li><a href="{{ url_for('logout') }}">Logout</a></li>
+                    {% else %}
+                    <li><a href="{{ url_for('login') }}">Login</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <h3>{{ message }}</h3>
+    <div class="signup-box">
+        <main>
+            <h2>Create an Account</h2>
+            <form method="post" action="{{ url_for('signup') }}">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" name="username" id="username">
+                </div>
+                <!-- <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" name="email" id="email">
+                </div> -->
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" name="password" id="password">
+                </div>
+                <div class="form-group">
+                    <label for="confirm_password">Confirm Password</label>
+                    <input type="password" name="confirm_password" id="confirm_password">
+                </div>
+                <button type="submit">Sign Up</button>
+            </form>
+        </main>
+    </div>
 </body>
+
 </html>

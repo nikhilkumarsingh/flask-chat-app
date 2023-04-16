@@ -1,20 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>My Chat App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/header.css') }}">
 </head>
-<body>
-<h1>My Chat App</h1>
-<h3>Hi {% if current_user.is_authenticated %}{{ current_user.username }}{% else %}Guest{% endif %}!</h3>
 
-{% if current_user.is_authenticated %}
-    <h3>My rooms</h3>
-    <ul>
-        {% for room in rooms %}
-            <li><a href="/rooms/{{ room._id.room_id }}">{{ room.room_name }}</a></li>
-        {% endfor %}
-    </ul>
-{% endif %}
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <ul>
+                    {% if current_user.is_authenticated %}
+                    <li><a href="{{ url_for('chats') }}">My chats</a></li>
+                    {% endif %}
+                    <li><a href="{{ url_for('home') }}">Home</a></li>
+                    <li><a href="{{ url_for('signup') }}">Sign up</a></li>
+                    {% if current_user.is_authenticated %}
+                    <li><a href="{{ url_for('logout') }}">Logout</a></li>
+                    {% else %}
+                    <li><a href="{{ url_for('login') }}">Login</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <main>
+        <section class="features">
+            <div class="container">
+                <h2>Welcome to KeepItPrivate</h2>
+                <br>
+                <p>KeepItPrivate is a place to chat with your friends, family, and colleagues. It's a simple and
+                    easy-to-use platform that allows you to connect with others and chat in real-time. How is it
+                    different from other platforms?
+                    Well it's very secure! While creating KeepItPrivate, we kept in mind our users' privacy and data
+                    security at every step of the process.
+                    With state of the art encryption and hashing algorithms, you can rest assured that your messages are
+                    always going to be private.</p>
+            </div>
+        </section>
+        <section class="features">
+            <div class="container">
+                <h2>Features</h2>
+                <ul>
+                    <li><strong>Group Chatting:</strong> Start group chats with your friends or join existing chat rooms
+                        on a wide range of topics.</li>
+                    <li><strong>Real-time Messaging:</strong> Send messages to your friends and receive instant replies,
+                        no matter where you are.</li>
+                    <li><strong>File Sharing:</strong> Share photos, videos, and other files with your friends right
+                        from within the platform.</li>
+                    <li><strong>Custom Emojis:</strong> Use our custom emojis and stickers to add some fun to your
+                        chats.</li>
+                </ul>
+            </div>
+        </section>
+        <section class="testimonials">
+            <div class="container">
+                <h2>Testimonials</h2>
+                <div class="testimonial">
+                    <p>"I love using Chat Platform to connect with my friends and family. It's so easy to use and we can
+                        chat in real-time."</p>
+                    <cite>- John Smith</cite>
+                </div>
+                <div class="testimonial">
+                    <p>"Chat Platform has made it so easy for me to connect with my colleagues. We use it for work and
+                        it's been a game-changer."</p>
+                    <cite>- Jane Doe</cite>
+                </div>
+            </div>
+        </section>
+    </main>
 </body>
+
 </html>
