@@ -1,8 +1,9 @@
 import json
 from datetime import datetime
 
+import requests
 from bson.json_util import dumps
-from flask import Flask, redirect, render_template, request, url_for
+from flask import Flask, jsonify, redirect, render_template, request, url_for
 from flask_login import (LoginManager, current_user, login_required,
                          login_user, logout_user)
 from flask_socketio import SocketIO, join_room, leave_room
@@ -12,7 +13,7 @@ from db import (add_room_members, get_messages, get_room, get_room_members,
                 get_rooms_for_user, get_user, is_room_admin, is_room_member,
                 remove_room_members, save_message, save_room, save_user,
                 update_room)
-from no_sql_db import DB, Table, add_friend
+from no_sql_db import DB, Table
 
 app = Flask(__name__)
 app.secret_key = "sfdjkafnk"
@@ -25,6 +26,20 @@ login_manager.init_app(app)
 @app.route("/")
 def home():
     return render_template("index.html")
+
+
+@app.route("/post", methods=["POST"])
+def post_fn():
+    data = request.get_json()
+    data = jsonify(data)
+    print(data.json)
+    return data
+
+
+@app.route("/get", methods=["GET"])
+def get_fn():
+    message = {"greeting": "Hello from flask!"}
+    return jsonify(message)
 
 
 @app.route("/chats")
@@ -41,7 +56,8 @@ def add_friend_route():
     if not friend_name:
         return "Friend name is required", 400
 
-    added = add_friend(friend_name)
+    # added = add_friend(friend_name)
+    added = True
     if added:
         return "Friend added successfully", 200
     else:
@@ -242,4 +258,5 @@ if __name__ == "__main__":
     db.export_JSON()
     db.create_chats()
     # db.message_add_test()
-    socketio.run(app, debug=True)
+    # socketio.run(app, debug=True)
+    app.run(ssl_context="adhoc", debug=True)
