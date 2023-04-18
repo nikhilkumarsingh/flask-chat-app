@@ -163,6 +163,6 @@ class DB():
             
             
 
-# Our global database
+# Our global database 
 # Invoke this as needed
 database = DB()
