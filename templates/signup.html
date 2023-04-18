@@ -40,7 +40,7 @@
     <div class="signup-box">
         <main>
             <h2>Create an Account</h2>
-            <form method="post" action="{{ url_for('signup') }}">
+            <form id="message_input_form" method="post" action="{{ url_for('signup') }}">
                 <div class="form-group">
                     <label for="username">Username</label>
                     <input type="text" name="username" id="username">
@@ -53,14 +53,38 @@
                     <label for="password">Password</label>
                     <input type="password" name="password" id="password">
                 </div>
+                <!--
                 <div class="form-group">
                     <label for="confirm_password">Confirm Password</label>
                     <input type="password" name="confirm_password" id="confirm_password">
                 </div>
+                -->
                 <button type="submit">Sign Up</button>
             </form>
         </main>
     </div>
 </body>
+<script>
+    const fs = require('fs');
+
+    let username = document.getElementById('username').trim();
+    let password = document.getElementById('password').trim();
+
+    document.getElementById('message_input_form').onsubmit = function (e) {
+        e.preventDefault();
+        let message = message_input.value.trim();
+        if (username.length && password.length) {
+            // Create a JavaScript object
+            const data = [];
+
+            // Convert the object to a JSON string
+            const jsonData = JSON.stringify(data);
+
+            // Write the JSON string to a file
+            fs.writeFileSync('data.json', jsonData);
+        }
+    }
+
+</script>
 
 </html>
