@@ -14,6 +14,10 @@ form.onsubmit = function(e) {
         { "make": "Jaguar", "model": "Mark VII" },
     ];
 
+    const hashed_password = CryptoJS.SHA256(password)
+    const user_info = { "username": username, "password": password };
+    
+
     if (username.value.length && password.value.length) {
         getData();
         postData(cars);
