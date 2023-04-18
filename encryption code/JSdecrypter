@@ -1,0 +1,10 @@
+async function findEncryptedFile(key, folder) {
+  const files = await fetch(folder).then((response) => response.json());
+  for (const filename of files) {
+    try {
+      const { filesize, iv } = await decryptFile(key, filename);
+      // decryption was successful, return the filename
+      return filename;
+    } catch (err) {
+      // decryption failed, try the next file
+    }
