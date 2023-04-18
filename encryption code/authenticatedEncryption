@@ -41,8 +41,8 @@ var mac = ciphertextWithMAC.substring(ciphertext.length);
 // Compute the MAC of the ciphertext and verify it matches the original MAC
 var computedMac = CryptoJS.HmacSHA256(ciphertext, key);
 if (computedMac.toString() !== mac) {
-  // The MAC doesn't match, so the ciphertext may have been tampered with
-  // Handle this error condition appropriately
+    // The MAC doesn't match, so the ciphertext may have been tampered with
+    // Handle this error condition appropriately
 }
 
 // Decrypt the ciphertext using AES and the key

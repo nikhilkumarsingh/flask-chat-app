@@ -12,7 +12,7 @@ from db import (add_room_members, get_messages, get_room, get_room_members,
                 get_rooms_for_user, get_user, is_room_admin, is_room_member,
                 remove_room_members, save_message, save_room, save_user,
                 update_room)
-from no_sql_db import DB, Table
+from no_sql_db import DB, Table, add_friend
 
 app = Flask(__name__)
 app.secret_key = "sfdjkafnk"
@@ -33,6 +33,19 @@ def chats():
     # if current_user.is_authenticated:
     #     rooms = get_rooms_for_user(current_user.username)
     return render_template("chats.html", friends=friends)
+
+
+@app.route("/add-friend", methods=["POST"])
+def add_friend_route():
+    friend_name = request.form.get("name")
+    if not friend_name:
+        return "Friend name is required", 400
+
+    added = add_friend(friend_name)
+    if added:
+        return "Friend added successfully", 200
+    else:
+        return "Failed to add friend", 500
 
 
 @app.route("/chats/<friend>/")
