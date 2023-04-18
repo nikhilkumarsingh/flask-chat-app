@@ -43,7 +43,7 @@
             <h2>Chat List</h2>
             <ul>
                 {% for friend in friends %}
-                <li><a href="{{ url_for('chat', friend=friend) }}">{{ friend }}</a></li>
+                <li><a href="/chats/{{ friend }}/">{{ friend }}</a></li>
                 {% endfor %}
             </ul>
         </div>

@@ -1,3 +1,5 @@
+import json
+
 from datetime import datetime
 
 from bson.json_util import dumps
@@ -24,10 +26,29 @@ def home():
 
 @app.route('/chats')
 def chats():
-    friends = []
-    if current_user.is_authenticated:
-        rooms = get_rooms_for_user(current_user.username)
+    friends = ['test1', 'test2', 'test3', 'test4', 'test5']
+    # if current_user.is_authenticated:
+    #     rooms = get_rooms_for_user(current_user.username)
     return render_template("chats.html", friends=friends)
+
+
+@app.route('/chats/<friend>/')
+@login_required
+def view_chat(friends: list, friend: str):
+    # room = get_room(room_id)
+    # if room and is_room_member(room, current_user.username):
+    #     room_members = get_room_members(room_id)  # should return a list of usernames
+    #     friend_username = room_members[1] if room_members[0] == current_user.username else room_members[0]
+    #     messages = get_messages(room_id)
+    #     return render_template('view_chat.html', username=current_user.username, room=room, friend_username=friend_username,
+    #                            messages=messages)
+    # else:
+    #     return "Room not found", 404
+    if current_user.is_authenticated and friend in friends:
+        messages = ['first message', 'second message', 'third message']
+        return render_template('view_chat.html', friend_username=friend, messages=messages)
+    else:
+        print("view_chat didn't work :(")
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -70,19 +91,6 @@ def signup():
             message = "User already exists!"
     return render_template('signup.html', message=message)
 
-
-@app.route('/chats/<friend>/')
-@login_required
-def view_chat(room_id: int, messages: list):
-    room = get_room(room_id)
-    if room and is_room_member(room, current_user.username):
-        room_members = get_room_members(room_id)  # should return a list of usernames
-        friend_username = room_members[1] if room_members[0] == current_user.username else room_members[0]
-        messages = get_messages(room_id)
-        return render_template('view_chat.html', username=current_user.username, room=room, friend_username=friend_username,
-                               messages=messages)
-    else:
-        return "Room not found", 404
 
 @app.route("/logout/")
 @login_required
