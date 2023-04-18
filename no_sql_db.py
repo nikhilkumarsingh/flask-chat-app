@@ -114,6 +114,9 @@ class DB():
             else:
                 with open(f'db/{name}.json', 'x') as f:
                     f.write(table.to_json())
+        if not os.path.exists('db/admin.json'):
+            with open(f'db/admin.json', 'x') as f:
+                f.write('[]')
 
     def create_chats(self):
         createdchats = []
@@ -163,6 +166,6 @@ class DB():
             
             
 
-# Our global database
+# Our global database 
 # Invoke this as needed
 database = DB()
