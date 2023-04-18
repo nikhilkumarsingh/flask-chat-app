@@ -1,0 +1,41 @@
+// Read the plaintext JSON file
+var plaintext = JSON.stringify(require('./plaintext.json')); // assumes plaintext.json is in the same directory
+
+// Generate a random encryption key
+var key = CryptoJS.lib.WordArray.random(16);
+
+// Encrypt the plaintext using AES and the key
+var ciphertext = CryptoJS.AES.encrypt(plaintext, key);
+
+// Compute the MAC of the ciphertext using HMAC-SHA256 and the key
+var mac = CryptoJS.HmacSHA256(ciphertext.toString(), key);
+
+// Concatenate the ciphertext and the MAC into a single string
+var ciphertextWithMAC = ciphertext.toString() + mac.toString();
+
+// Write the encrypted data to a file
+fs.writeFileSync('./encrypted.json', ciphertextWithMAC);
+
+// ...
+
+// To decrypt the encrypted JSON file:
+
+// Read the encrypted JSON file
+var ciphertextWithMAC = fs.readFileSync('./encrypted.json', 'utf8');
+
+// Split the ciphertext and the MAC
+var ciphertext = ciphertextWithMAC.substring(0, ciphertextWithMAC.length - 64); // assuming the MAC is 64 bytes long
+var mac = ciphertextWithMAC.substring(ciphertext.length);
+
+// Compute the MAC of the ciphertext and verify it matches the original MAC
+var computedMac = CryptoJS.HmacSHA256(ciphertext, key);
+if (computedMac.toString() !== mac) {
+  // The MAC doesn't match, so the ciphertext may have been tampered with
+  // Handle this error condition appropriately
+}
+
+// Decrypt the ciphertext using AES and the key
+var decryptedPlaintext = CryptoJS.AES.decrypt(ciphertext, key).toString(CryptoJS.enc.Utf8);
+
+// Parse the decrypted plaintext as a JSON object
+var decryptedJson = JSON.parse(decryptedPlaintext);
