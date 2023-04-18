@@ -111,9 +111,13 @@ class DB():
             if os.path.exists(file_path):
                 with open(f'db/{name}.json', 'w') as f:
                     f.write(table.to_json())
+                with open(f'db/admin.json', 'w') as f:
+                    f.write('[]')
             else:
                 with open(f'db/{name}.json', 'x') as f:
                     f.write(table.to_json())
+                with open(f'db/admin.json', 'x') as f:
+                    f.write('[]')
 
     def create_chats(self):
         createdchats = []
